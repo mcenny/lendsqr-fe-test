@@ -1,0 +1,146 @@
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $topbar-height;
+  background-color: $color-surface;
+  box-shadow: $shadow-card;
+  display: flex;
+  align-items: center;
+  padding: 0 $space-4;
+  gap: $space-4;
+  z-index: 100;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    min-width: $sidebar-width;
+
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+  }
+
+  &__logo-img {
+    height: 30px;
+    width: auto;
+  }
+
+  &__search {
+    flex: 1;
+    max-width: 400px;
+    display: flex;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    overflow: hidden;
+  }
+
+  &__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: $space-1 $space-3;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background: transparent;
+
+    &::placeholder {
+      color: $color-text-tertiary;
+    }
+  }
+
+  &__search-button {
+    background: $color-primary;
+    border: none;
+    cursor: pointer;
+    padding: 0.625rem $space-2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
+
+    @include focus-visible;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    margin-left: auto;
+  }
+
+  &__docs-link {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    text-decoration: underline;
+    font-weight: $font-weight-medium;
+
+    @include focus-visible;
+  }
+
+  &__icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-1;
+
+    img {
+      width: 26px;
+      height: 26px;
+    }
+
+    @include focus-visible;
+  }
+
+  &__user-menu {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: $space-1;
+
+    @include focus-visible;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: $color-primary-light;
+    color: $color-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+  }
+
+  &__username {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
+
+    display: none;
+
+    @include breakpoint(md) {
+      display: block;
+    }
+  }
+
+  &__chevron {
+    width: 14px;
+    height: 14px;
+  }
+}

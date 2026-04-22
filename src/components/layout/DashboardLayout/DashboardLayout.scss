@@ -1,0 +1,23 @@
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $color-background;
+  font-family: $font-family-primary;
+
+  &__body {
+    display: flex;
+    flex: 1;
+    padding-top: $topbar-height;
+  }
+
+  &__main {
+    flex: 1;
+    padding: $space-6;
+    min-width: 0;
+
+    @include breakpoint(lg) {
+      margin-left: $sidebar-width;
+    }
+  }
+}

@@ -12,6 +12,7 @@ function createTestQueryClient() {
   })
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- test utility file, not a component module
 function AllProviders({ children }: { children: React.ReactNode }) {
   const queryClient = createTestQueryClient()
   return (
@@ -24,5 +25,6 @@ function AllProviders({ children }: { children: React.ReactNode }) {
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   render(ui, { wrapper: AllProviders, ...options })
 
+// eslint-disable-next-line react-refresh/only-export-components -- re-exporting test library helpers
 export * from '@testing-library/react'
 export { customRender as render }
