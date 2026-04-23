@@ -1,0 +1,29 @@
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 $space-2;
+  border-radius: $radius-pill;
+  font-size: $font-size-sm;
+
+  &--active {
+    background-color: $color-status-active-bg;
+    color: $color-status-active;
+  }
+
+  &--inactive {
+    background-color: $color-status-inactive-bg;
+    color: $color-status-inactive;
+  }
+
+  &--pending {
+    background-color: $color-status-pending-bg;
+    color: $color-status-pending;
+  }
+
+  &--blacklisted {
+    background-color: $color-status-blacklisted-bg;
+    color: $color-status-blacklisted;
+  }
+}
