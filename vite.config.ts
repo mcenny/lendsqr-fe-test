@@ -13,7 +13,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        loadPaths: [path.resolve(__dirname, 'src')],
+        includePaths: [path.resolve(__dirname, 'src')],
         additionalData: (source: string, fp: string) => {
           if (fp.includes('/styles/abstracts/')) return source
           return `@use "styles/abstracts" as *;\n${source}`
