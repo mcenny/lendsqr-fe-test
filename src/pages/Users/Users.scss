@@ -1,0 +1,15 @@
+.users-page {
+  &__heading {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+    margin-bottom: $space-4;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $space-4;
+    margin-bottom: $space-6;
+  }
+}

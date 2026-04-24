@@ -1,0 +1,214 @@
+.users-table {
+  background-color: $color-surface;
+  border: 1px solid rgba(33, 63, 125, 0.06);
+  border-radius: $radius-sm;
+  box-shadow: $shadow-card;
+  padding: 30px 30px 32px;
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  &__th {
+    padding: $space-3 $space-2;
+    text-align: left;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+    white-space: nowrap;
+    position: relative;
+
+    &--actions {
+      width: 40px;
+      padding: 0;
+    }
+  }
+
+  &__th-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    color: $color-text-secondary;
+    flex-shrink: 0;
+
+    @include focus-visible;
+  }
+
+  &__tr {
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: $space-4;
+      right: $space-4;
+      height: 1px;
+      background-color: $color-border;
+    }
+
+    &:hover {
+      background-color: rgba(84, 95, 125, 0.02);
+    }
+  }
+
+  &__td {
+    padding: $space-3 $space-2;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:last-child {
+      padding: $space-3 0;
+      text-align: center;
+      width: 40px;
+      overflow: visible;
+    }
+  }
+
+  &__skeleton-cell {
+    height: 14px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: $radius-sm;
+    animation: skeleton-shimmer 1.5s infinite;
+
+    @include reduced-motion {
+      animation: none;
+      background: #f0f0f0;
+    }
+  }
+
+  &__empty,
+  &__error {
+    padding: $space-6;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+
+  &__error {
+    color: $color-status-blacklisted;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.users-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-3 0;
+  margin-top: $space-2;
+  flex-wrap: wrap;
+  gap: $space-2;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__size-select {
+    border: none;
+    background-color: rgba(33, 63, 125, 0.1);
+    border-radius: $radius-sm;
+    padding: 2px $space-1;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23213f7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    padding-right: 20px;
+  }
+
+  &__pages {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: $radius-sm;
+    background-color: rgba(33, 63, 125, 0.1);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.3;
+    }
+
+    &:not(:disabled):hover {
+      background-color: rgba(33, 63, 125, 0.2);
+    }
+
+    @include focus-visible;
+  }
+
+  &__page-btn {
+    min-width: 24px;
+    height: 24px;
+    border-radius: $radius-sm;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    opacity: 0.6;
+    padding: 0 6px;
+
+    &--active {
+      opacity: 1;
+      font-weight: $font-weight-medium;
+    }
+
+    &:not(.users-pagination__page-btn--active):hover {
+      background-color: rgba(33, 63, 125, 0.05);
+    }
+
+    @include focus-visible;
+  }
+
+  &__ellipsis {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    opacity: 0.6;
+    padding: 0 4px;
+  }
+}
