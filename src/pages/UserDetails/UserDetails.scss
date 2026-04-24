@@ -1,0 +1,229 @@
+.user-details {
+  &__nav {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    margin-bottom: $space-4;
+    text-decoration: none;
+    color: $color-text-secondary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+
+    &:hover {
+      color: $color-primary-dark;
+    }
+
+    @include focus-visible;
+  }
+
+  &__nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin-bottom: $space-4;
+  }
+
+  &__heading {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    height: 40px;
+    min-width: 170px;
+    border-radius: $radius-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-wide;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    padding: 0 $space-3;
+    font-family: $font-family-primary;
+
+    @include focus-visible;
+
+    &--blacklist {
+      border: 1px solid $color-status-blacklisted;
+      color: $color-status-blacklisted;
+    }
+
+    &--activate {
+      border: 1px solid $color-primary;
+      color: $color-primary;
+    }
+  }
+
+  &__profile-card {
+    background-color: $color-surface;
+    border: 1px solid rgba(33, 63, 125, 0.06);
+    border-radius: $radius-sm;
+    box-shadow: $shadow-card;
+    margin-bottom: $space-4;
+    overflow: hidden;
+  }
+
+  &__basic-info {
+    display: flex;
+    align-items: center;
+    gap: $space-5;
+    flex-wrap: wrap;
+    padding: 30px 30px 30px;
+  }
+
+  &__avatar-wrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: rgba(84, 95, 125, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__avatar-icon {
+    width: 40px;
+    height: 40px;
+    color: $color-text-secondary;
+    opacity: 0.45;
+  }
+
+  &__name-block {
+    min-width: 120px;
+  }
+
+  &__name {
+    font-size: 1.375rem;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+    margin-bottom: 6px;
+  }
+
+  &__user-id {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 80px;
+    align-self: center;
+    background-color: rgba(84, 95, 125, 0.2);
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+      display: none;
+    }
+  }
+
+  &__tier-block {
+    min-width: 100px;
+  }
+
+  &__tier-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    margin-bottom: 10px;
+  }
+
+  &__stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__star {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__balance-block {
+    min-width: 160px;
+  }
+
+  &__balance {
+    font-size: 1.375rem;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+    margin-bottom: 6px;
+  }
+
+  &__bank {
+    font-size: $font-size-xs;
+    color: $color-primary-dark;
+  }
+
+  &__tabs {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 $space-5;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__tab {
+    padding: 10px 0;
+    font-size: $font-size-base;
+    color: rgba(0, 0, 0, 0.8);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: $font-family-primary;
+    font-weight: $font-weight-regular;
+
+    &[aria-selected='true'] {
+      color: $color-primary;
+      border-bottom-color: $color-primary;
+    }
+
+    @include focus-visible;
+  }
+
+  &__tab-content {
+    background-color: $color-surface;
+    border: 1px solid rgba(33, 63, 125, 0.06);
+    border-radius: $radius-sm;
+    box-shadow: $shadow-card;
+    padding: $space-5 $space-5;
+  }
+
+  &__tab-placeholder {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    padding: $space-4;
+  }
+
+  &__loading,
+  &__error {
+    padding: $space-6;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &__error {
+    color: $color-status-blacklisted;
+  }
+}
