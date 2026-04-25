@@ -195,5 +195,13 @@
     font-size: $font-size-xs;
     color: $color-status-blacklisted;
     margin-top: 4px;
+    min-height: 1.25rem;
+  }
+
+  &__submit {
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }

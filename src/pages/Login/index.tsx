@@ -9,27 +9,65 @@ interface FormErrors {
   password?: string
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MIN_PASSWORD_LENGTH = 6
+
+function validateEmail(value: string): string | undefined {
+  if (!value.trim()) return 'Email is required'
+  if (!EMAIL_RE.test(value.trim())) return 'Enter a valid email address'
+  return undefined
+}
+
+function validatePassword(value: string): string | undefined {
+  if (!value) return 'Password is required'
+  if (value.length < MIN_PASSWORD_LENGTH) return `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
+  return undefined
+}
+
 export default function Login() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  function handleEmailBlur() {
+    const err = validateEmail(email)
+    setErrors((prev) => {
+      const next = { ...prev }
+      if (err) next.email = err
+      else delete next.email
+      return next
+    })
+  }
+
+  function handlePasswordBlur() {
+    const err = validatePassword(password)
+    setErrors((prev) => {
+      const next = { ...prev }
+      if (err) next.password = err
+      else delete next.password
+      return next
+    })
+  }
 
   function validate(): boolean {
     const next: FormErrors = {}
-    if (!email.trim()) next.email = 'Email is required'
-    if (!password) next.password = 'Password is required'
+    const emailErr = validateEmail(email)
+    const passwordErr = validatePassword(password)
+    if (emailErr) next.email = emailErr
+    if (passwordErr) next.password = passwordErr
     setErrors(next)
-    return Object.keys(next).length === 0
+    return !emailErr && !passwordErr
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (validate()) {
-      sessionStorage.setItem('isLoggedIn', 'true')
-      void navigate('/users')
-    }
+    if (!validate()) return
+    setIsSubmitting(true)
+    sessionStorage.setItem('isLoggedIn', 'true')
+    void navigate('/users')
   }
 
   return (
@@ -56,16 +94,15 @@ export default function Login() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={handleEmailBlur}
                   aria-label="Email"
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   aria-invalid={!!errors.email}
                 />
               </div>
-              {errors.email && (
-                <p id="email-error" className="login__error" role="alert">
-                  {errors.email}
-                </p>
-              )}
+              <p id="email-error" className="login__error" role="alert">
+                {errors.email ?? ''}
+              </p>
             </div>
 
             <div className="login__field">
@@ -76,6 +113,7 @@ export default function Login() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onBlur={handlePasswordBlur}
                   aria-label="Password"
                   aria-describedby={errors.password ? 'password-error' : undefined}
                   aria-invalid={!!errors.password}
@@ -89,19 +127,17 @@ export default function Login() {
                   {showPassword ? 'HIDE' : 'SHOW'}
                 </button>
               </div>
-              {errors.password && (
-                <p id="password-error" className="login__error" role="alert">
-                  {errors.password}
-                </p>
-              )}
+              <p id="password-error" className="login__error" role="alert">
+                {errors.password ?? ''}
+              </p>
             </div>
 
             <a href="#" className="login__forgot">
-              Forgot Password?
+              FORGOT PASSWORD?
             </a>
 
-            <button type="submit" className="login__submit">
-              Log In
+            <button type="submit" className="login__submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Logging in…' : 'LOG IN'}
             </button>
           </form>
         </div>
