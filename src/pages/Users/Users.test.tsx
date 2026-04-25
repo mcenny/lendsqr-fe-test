@@ -16,7 +16,6 @@ const mockUsers: User[] = [
     dateJoined: '2020-05-15T10:00:00.000Z',
     status: 'active',
     profile: {
-      fullName: 'Adedeji',
       phoneNumber: '08078903721',
       emailAddress: 'adedeji@lendsqr.com',
       bvn: '07060780922',

@@ -17,13 +17,12 @@ vi.mock('@/lib/cache', () => ({
 const mockUser: User = {
   id: '1',
   organization: 'Lendsqr',
-  username: 'grace_effiom',
+  username: 'Grace Effiom',
   email: 'grace@gmail.com',
   phoneNumber: '07060780922',
   dateJoined: '2020-04-30T10:00:00.000Z',
   status: 'active',
   profile: {
-    fullName: 'Grace Effiom',
     phoneNumber: '07060780922',
     emailAddress: 'grace@gmail.com',
     bvn: '07060780922',

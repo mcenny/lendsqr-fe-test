@@ -85,7 +85,7 @@ export default function UserDetails() {
               </div>
 
               <div className="user-details__name-block">
-                <p className="user-details__name">{user.profile?.fullName ?? user.username}</p>
+                <p className="user-details__name">{user.username}</p>
                 <p className="user-details__user-id">{user.id}</p>
               </div>
 

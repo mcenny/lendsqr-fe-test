@@ -15,13 +15,13 @@ function Field({ label, value }: { label: string; value: string | number }) {
 }
 
 export default function GeneralDetails({ user }: Props) {
-  const { profile, education, socials, guarantors } = user
+  const { username, profile, education, socials, guarantors } = user
   return (
     <div className="general-details">
       <section className="general-details__section">
         <h3 className="general-details__section-title">Personal Information</h3>
         <div className="general-details__grid">
-          <Field label="Full Name" value={profile.fullName} />
+          <Field label="Full Name" value={username} />
           <Field label="Phone Number" value={profile.phoneNumber} />
           <Field label="Email Address" value={profile.emailAddress} />
           <Field label="BVN" value={profile.bvn} />

@@ -9,7 +9,6 @@ export interface UserGuarantor {
 }
 
 export interface UserProfile {
-  fullName: string
   phoneNumber: string
   emailAddress: string
   bvn: string
