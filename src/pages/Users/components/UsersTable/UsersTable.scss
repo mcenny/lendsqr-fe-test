@@ -1,3 +1,7 @@
+.users-table-wrapper {
+  position: relative;
+}
+
 .users-table {
   background-color: $color-surface;
   border: 1px solid rgba(33, 63, 125, 0.06);
@@ -103,6 +107,26 @@
 
   &__error {
     color: $color-status-blacklisted;
+  }
+
+  &__retry-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    padding: 0;
+    text-decoration: underline;
+
+    @include focus-visible;
+  }
+
+  &__filter-popover {
+    position: absolute;
+    z-index: 100;
+    width: 270px;
+    box-shadow: $shadow-dropdown;
   }
 }
 

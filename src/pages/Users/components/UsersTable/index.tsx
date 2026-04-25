@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '@/lib/api/users'
@@ -35,6 +35,8 @@ function formatDate(raw: string): string {
 export default function UsersTable() {
   const [searchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
+  const [filterAnchor, setFilterAnchor] = useState<{ top: number; left: number } | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   const page = Number(searchParams.get('page') ?? '1')
   const limit = Number(searchParams.get('limit') ?? '10')
@@ -43,7 +45,7 @@ export default function UsersTable() {
     [...searchParams.entries()].filter(([k]) => !['page', 'limit'].includes(k)),
   )
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['users', params],
     queryFn: () => getUsers(params),
   })
@@ -51,99 +53,132 @@ export default function UsersTable() {
   const pageData = data?.slice((page - 1) * limit, page * limit) ?? []
   const total = data?.length ?? 0
 
+  const FILTER_WIDTH = 270
+
+  function handleFilterClick(key: string, btn: HTMLButtonElement) {
+    if (activeFilter === key) {
+      setActiveFilter(null)
+      setFilterAnchor(null)
+      return
+    }
+    const wrapperRect = wrapperRef.current?.getBoundingClientRect()
+    const btnRect = btn.getBoundingClientRect()
+    if (wrapperRect) {
+      const idealLeft = btnRect.left - wrapperRect.left
+      const maxLeft = wrapperRect.width - FILTER_WIDTH
+      setFilterAnchor({
+        top: btnRect.bottom - wrapperRect.top,
+        left: Math.min(idealLeft, Math.max(0, maxLeft)),
+      })
+    }
+    setActiveFilter(key)
+  }
+
   return (
-    <>
-    <div className="users-table">
-      <table className="users-table__table" aria-label="Users">
-        <colgroup>
-          <col style={{ width: '15%' }} />
-          <col style={{ width: '14%' }} />
-          <col style={{ width: '20%' }} />
-          <col style={{ width: '16%' }} />
-          <col style={{ width: '20%' }} />
-          <col style={{ width: '12%' }} />
-          <col style={{ width: '40px' }} />
-        </colgroup>
-        <thead>
-          <tr>
-            {COLUMNS.map((col) => (
-              <th key={col.key} className="users-table__th" scope="col">
-                <div className="users-table__th-inner">
-                  {col.label}
+    <div className="users-table-wrapper" ref={wrapperRef}>
+      <div className="users-table">
+        <table className="users-table__table" aria-label="Users">
+          <colgroup>
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '14%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '16%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '40px' }} />
+          </colgroup>
+          <thead>
+            <tr>
+              {COLUMNS.map((col) => (
+                <th key={col.key} className="users-table__th" scope="col">
+                  <div className="users-table__th-inner">
+                    {col.label}
+                    <button
+                      className="users-table__filter-btn"
+                      aria-label={`Filter by ${col.label}`}
+                      onClick={(e) => handleFilterClick(col.key, e.currentTarget)}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M6.22222 13.3333H9.77778V11.5556H6.22222V13.3333ZM0 2.66667V4.44444H16V2.66667H0ZM2.66667 8.88889H13.3333V7.11111H2.66667V8.88889Z" fill="#545F7D" />
+                      </svg>
+                    </button>
+                  </div>
+                </th>
+              ))}
+              <th className="users-table__th users-table__th--actions" scope="col" aria-label="Actions" />
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading &&
+              Array.from({ length: limit }).map((_, i) => (
+                <tr key={i}>
+                  {Array.from({ length: 7 }).map((__, j) => (
+                    <td key={j} className="users-table__td">
+                      <div
+                        className="users-table__skeleton-cell"
+                        style={{ width: `${60 + (j * 13) % 40}%` }}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+
+            {isError && (
+              <tr>
+                <td colSpan={7} className="users-table__error">
+                  Failed to load users.{' '}
                   <button
-                    className="users-table__filter-btn"
-                    aria-label={`Filter by ${col.label}`}
-                    onClick={() => setActiveFilter(activeFilter === col.key ? null : col.key)}
+                    className="users-table__retry-btn"
+                    onClick={() => void refetch()}
                   >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <path d="M6.22222 13.3333H9.77778V11.5556H6.22222V13.3333ZM0 2.66667V4.44444H16V2.66667H0ZM2.66667 8.88889H13.3333V7.11111H2.66667V8.88889Z" fill="#545F7D" />
-                    </svg>
+                    Try again
                   </button>
-                </div>
-                {activeFilter === col.key && (
-                  <UsersFilter onClose={() => setActiveFilter(null)} />
-                )}
-              </th>
-            ))}
-            <th className="users-table__th users-table__th--actions" scope="col" aria-label="Actions" />
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading &&
-            Array.from({ length: limit }).map((_, i) => (
-              <tr key={i}>
-                {Array.from({ length: 7 }).map((__, j) => (
-                  <td key={j} className="users-table__td">
-                    <div
-                      className="users-table__skeleton-cell"
-                      style={{ width: `${60 + (j * 13) % 40}%` }}
-                    />
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && !isError && pageData.length === 0 && (
+              <tr>
+                <td colSpan={7} className="users-table__empty">
+                  No users found.
+                </td>
+              </tr>
+            )}
+
+            {!isLoading &&
+              !isError &&
+              pageData.map((user) => (
+                <tr key={user.id} className="users-table__tr">
+                  <td className="users-table__td">{user.organization}</td>
+                  <td className="users-table__td">{user.username}</td>
+                  <td className="users-table__td">{user.email.toLowerCase()}</td>
+                  <td className="users-table__td">{user.phoneNumber}</td>
+                  <td className="users-table__td">{formatDate(user.dateJoined)}</td>
+                  <td className="users-table__td">
+                    <StatusPill status={user.status.toLowerCase() as UserStatus} />
                   </td>
-                ))}
-              </tr>
-            ))}
+                  <td className="users-table__td">
+                    <UserActionsMenu userId={user.id} />
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
-          {isError && (
-            <tr>
-              <td colSpan={7} className="users-table__error">
-                Failed to load users. Please try again.
-              </td>
-            </tr>
-          )}
+      {activeFilter && filterAnchor && (
+        <div
+          className="users-table__filter-popover"
+          style={{ top: filterAnchor.top, left: filterAnchor.left }}
+        >
+          <UsersFilter onClose={() => { setActiveFilter(null); setFilterAnchor(null) }} />
+        </div>
+      )}
 
-          {!isLoading && !isError && pageData.length === 0 && (
-            <tr>
-              <td colSpan={7} className="users-table__empty">
-                No users found.
-              </td>
-            </tr>
-          )}
-
-          {!isLoading &&
-            !isError &&
-            pageData.map((user) => (
-              <tr key={user.id} className="users-table__tr">
-                <td className="users-table__td">{user.organization}</td>
-                <td className="users-table__td">{user.username}</td>
-                <td className="users-table__td">{user.email.toLowerCase()}</td>
-                <td className="users-table__td">{user.phoneNumber}</td>
-                <td className="users-table__td">{formatDate(user.dateJoined)}</td>
-                <td className="users-table__td">
-                  <StatusPill status={user.status.toLowerCase() as UserStatus} />
-                </td>
-                <td className="users-table__td">
-                  <UserActionsMenu userId={user.id} />
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {!isLoading && !isError && total > 0 && (
+        <UsersPagination total={total} page={page} limit={limit} />
+      )}
     </div>
-
-    {!isLoading && !isError && total > 0 && (
-      <UsersPagination total={total} page={page} limit={limit} />
-    )}
-    </>
   )
 }
 
