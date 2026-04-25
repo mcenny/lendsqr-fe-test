@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserById } from '@/lib/api/users'
 import { getCachedUser, setCachedUser } from '@/lib/cache'
@@ -78,6 +78,9 @@ export default function UserDetails() {
   const { id = '' } = useParams<{ id: string }>()
   const [activeTab, setActiveTab] = useState(0)
   const queryClient = useQueryClient()
+  const location = useLocation()
+  const returnSearch = (location.state as { returnSearch?: string } | null)?.returnSearch ?? ''
+  const backTo = returnSearch ? `/users?${returnSearch}` : '/users'
 
   const { data: user, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['user', id],
@@ -108,7 +111,7 @@ export default function UserDetails() {
 
   return (
     <div className="user-details">
-      <Link to="/users" className="user-details__nav" aria-label="Back to Users">
+      <Link to={backTo} className="user-details__nav" aria-label="Back to Users">
         <svg
           className="user-details__nav-icon"
           viewBox="0 0 24 24"

@@ -23,7 +23,7 @@ describe('UserActionsMenu', () => {
     render(<UserActionsMenu userId="u42" />)
     await userEvent.click(screen.getByRole('button', { name: /user actions/i }))
     await userEvent.click(screen.getByRole('menuitem', { name: /view details/i }))
-    expect(mockNavigate).toHaveBeenCalledWith('/users/u42')
+    expect(mockNavigate).toHaveBeenCalledWith('/users/u42', expect.objectContaining({ state: expect.objectContaining({ returnSearch: expect.any(String) }) }))
   })
 
   it('closes the menu when Blacklist User is clicked', async () => {

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './UserActionsMenu.scss'
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 export default function UserActionsMenu({ userId }: Props) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,7 +44,12 @@ export default function UserActionsMenu({ userId }: Props) {
           <button
             className="user-actions-menu__item"
             role="menuitem"
-            onClick={() => { setOpen(false); void navigate(`/users/${userId}`) }}
+            onClick={() => {
+              setOpen(false)
+              void navigate(`/users/${userId}`, {
+                state: { returnSearch: searchParams.toString() },
+              })
+            }}
           >
             <svg viewBox="0 0 16 12" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M1 6s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z" />
