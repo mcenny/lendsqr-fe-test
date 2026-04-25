@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { render } from '@/test/test-utils'
 import UserDetails from './index'
+import { ApiError } from '@/types/api'
 import type { User } from '@/types/user'
 
 vi.mock('react-router-dom', async () => {
@@ -99,5 +101,29 @@ describe('UserDetails page', () => {
     render(<UserDetails />)
     expect(screen.getByRole('button', { name: /blacklist user/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /activate user/i })).toBeInTheDocument()
+  })
+
+  it('shows "coming soon" when a non-General Details tab is clicked', async () => {
+    render(<UserDetails />)
+    await screen.findAllByText('Grace Effiom')
+    await userEvent.click(screen.getByRole('tab', { name: /documents/i }))
+    expect(screen.getByText(/coming soon/i)).toBeInTheDocument()
+  })
+
+  it('shows generic error state with retry button when fetch fails', async () => {
+    const { getUserById } = await import('@/lib/api/users')
+    vi.mocked(getUserById).mockRejectedValue(new Error('Network error'))
+    render(<UserDetails />)
+    expect(await screen.findByText(/failed to load user/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
+  })
+
+  it('shows 404 message with link to users when user is not found', async () => {
+    const { getUserById } = await import('@/lib/api/users')
+    vi.mocked(getUserById).mockRejectedValue(new ApiError(404, 'Not found'))
+    render(<UserDetails />)
+    const errorAlert = await screen.findByRole('alert')
+    expect(within(errorAlert).getByText(/user not found/i)).toBeInTheDocument()
+    expect(within(errorAlert).getByRole('link', { name: /back to users/i })).toBeInTheDocument()
   })
 })
