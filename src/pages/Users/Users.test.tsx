@@ -87,4 +87,31 @@ describe('Users page', () => {
     await userEvent.click(filterBtns[0])
     expect(screen.getByRole('dialog', { name: /filter users/i })).toBeInTheDocument()
   })
+
+  it('shows error state with retry button when API fails', async () => {
+    vi.spyOn(usersApi, 'getUsers').mockRejectedValue(new Error('Network error'))
+    render(<Users />)
+    expect(await screen.findByText(/failed to load users/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
+  })
+
+  it('shows empty state when API returns no users', async () => {
+    vi.spyOn(usersApi, 'getUsers').mockResolvedValue([])
+    render(<Users />)
+    expect(await screen.findByText(/no users found/i)).toBeInTheDocument()
+  })
+
+  it('pagination previous button is disabled on page 1', async () => {
+    render(<Users />)
+    await screen.findByText('adedeji')
+    const prevBtn = screen.getByRole('button', { name: /previous page/i })
+    expect(prevBtn).toBeDisabled()
+  })
+
+  it('pagination next button is disabled when all users fit on one page', async () => {
+    render(<Users />)
+    await screen.findByText('adedeji')
+    const nextBtn = screen.getByRole('button', { name: /next page/i })
+    expect(nextBtn).toBeDisabled()
+  })
 })
