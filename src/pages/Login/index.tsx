@@ -26,7 +26,10 @@ export default function Login() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (validate()) void navigate('/users')
+    if (validate()) {
+      sessionStorage.setItem('isLoggedIn', 'true')
+      void navigate('/users')
+    }
   }
 
   return (

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import homeIcon from '@/assets/icons/home.svg'
 import briefcaseIcon from '@/assets/icons/briefcase.svg'
 import usersNavIcon from '@/assets/icons/users-nav.svg'
@@ -38,6 +38,13 @@ const SETTINGS_NAV = [
 ]
 
 export default function Sidebar() {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    sessionStorage.removeItem('isLoggedIn')
+    void navigate('/login')
+  }
+
   return (
     <nav className="sidebar" aria-label="Main navigation">
       <div className="sidebar__switch-org">
@@ -106,7 +113,11 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar__footer">
-        <button className="sidebar__nav-item sidebar__logout" aria-label="Log out">
+        <button
+          className="sidebar__nav-item sidebar__logout"
+          aria-label="Log out"
+          onClick={handleLogout}
+        >
           <img src={logoutIcon} alt="" aria-hidden="true" />
           <span>Logout</span>
         </button>
