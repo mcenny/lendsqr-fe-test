@@ -215,15 +215,111 @@
     padding: $space-4;
   }
 
-  &__loading,
   &__error {
     padding: $space-6;
     text-align: center;
     font-size: $font-size-sm;
-    color: $color-text-secondary;
-  }
-
-  &__error {
     color: $color-status-blacklisted;
   }
+
+  &__error-link,
+  &__retry-btn {
+    color: $color-primary;
+    text-decoration: underline;
+    font-size: $font-size-sm;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: $font-family-primary;
+
+    @include focus-visible;
+  }
+
+  // --- Skeleton styles ---
+
+  @mixin skeleton-base {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: $radius-sm;
+    animation: ud-skeleton-shimmer 1.5s infinite;
+
+    @include reduced-motion {
+      animation: none;
+      background: #f0f0f0;
+    }
+  }
+
+  &__skeleton-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    @include skeleton-base;
+    flex-shrink: 0;
+  }
+
+  &__skeleton-name-block,
+  &__skeleton-tier-block,
+  &__skeleton-balance-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 120px;
+  }
+
+  &__skeleton-line {
+    height: 14px;
+    @include skeleton-base;
+
+    &--wide { width: 120px; }
+    &--narrow { width: 80px; }
+    &--section-title { width: 160px; height: 16px; margin-bottom: $space-3; }
+    &--label { width: 80px; height: 11px; }
+    &--value { width: 120px; height: 14px; }
+  }
+
+  &__skeleton-stars {
+    width: 60px;
+    height: 16px;
+    @include skeleton-base;
+  }
+
+  &__tabs--skeleton {
+    padding: 0 $space-5;
+    display: flex;
+    gap: $space-4;
+  }
+
+  &__skeleton-tab {
+    width: 80px;
+    height: 12px;
+    margin: 14px 0;
+    @include skeleton-base;
+  }
+
+  &__skeleton-section {
+    padding: $space-4 0;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: $space-4;
+  }
+
+  &__skeleton-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@keyframes ud-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }

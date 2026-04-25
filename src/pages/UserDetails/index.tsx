@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserById } from '@/lib/api/users'
 import { getCachedUser, setCachedUser } from '@/lib/cache'
+import { ApiError } from '@/types/api'
+import type { User } from '@/types/user'
 import GeneralDetails from './components/GeneralDetails'
 import './UserDetails.scss'
 
@@ -23,11 +25,61 @@ function StarIcon({ filled }: { filled: boolean }) {
   )
 }
 
+function ProfileCardSkeleton() {
+  return (
+    <div className="user-details__profile-card">
+      <div className="user-details__basic-info">
+        <div className="user-details__skeleton-avatar" />
+        <div className="user-details__skeleton-name-block">
+          <div className="user-details__skeleton-line user-details__skeleton-line--wide" />
+          <div className="user-details__skeleton-line user-details__skeleton-line--narrow" />
+        </div>
+        <div className="user-details__divider" aria-hidden="true" />
+        <div className="user-details__skeleton-tier-block">
+          <div className="user-details__skeleton-line user-details__skeleton-line--narrow" />
+          <div className="user-details__skeleton-stars" />
+        </div>
+        <div className="user-details__divider" aria-hidden="true" />
+        <div className="user-details__skeleton-balance-block">
+          <div className="user-details__skeleton-line user-details__skeleton-line--wide" />
+          <div className="user-details__skeleton-line user-details__skeleton-line--narrow" />
+        </div>
+      </div>
+      <div className="user-details__tabs user-details__tabs--skeleton">
+        {TABS.map((tab) => (
+          <div key={tab} className="user-details__skeleton-tab" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ContentSkeleton() {
+  return (
+    <div className="user-details__tab-content">
+      {[1, 2, 3, 4].map((section) => (
+        <div key={section} className="user-details__skeleton-section">
+          <div className="user-details__skeleton-line user-details__skeleton-line--section-title" />
+          <div className="user-details__skeleton-grid">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="user-details__skeleton-field">
+                <div className="user-details__skeleton-line user-details__skeleton-line--label" />
+                <div className="user-details__skeleton-line user-details__skeleton-line--value" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function UserDetails() {
   const { id = '' } = useParams<{ id: string }>()
   const [activeTab, setActiveTab] = useState(0)
+  const queryClient = useQueryClient()
 
-  const { data: user, isLoading, isError } = useQuery({
+  const { data: user, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['user', id],
     queryFn: async () => {
       const cached = await getCachedUser(id)
@@ -36,8 +88,23 @@ export default function UserDetails() {
       await setCachedUser(fetched)
       return fetched
     },
+    initialData: (): User | undefined => {
+      const allUsers = queryClient.getQueryData<User[]>(['users', {}])
+      return allUsers?.find((u) => u.id === id)
+    },
     enabled: !!id,
   })
+
+  // Background revalidation: if data came from IndexedDB cache or initialData, still refresh from API
+  useEffect(() => {
+    if (!user || !id) return
+    void getUserById(id)
+      .then((fresh) => setCachedUser(fresh))
+      .catch(() => undefined)
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const is404 =
+    isError && error instanceof ApiError && error.status === 404
 
   return (
     <div className="user-details">
@@ -65,8 +132,35 @@ export default function UserDetails() {
         </div>
       </div>
 
-      {isLoading && <div className="user-details__loading">Loading user details…</div>}
-      {isError && <div className="user-details__error">Failed to load user. Please try again.</div>}
+      {isLoading && (
+        <>
+          <ProfileCardSkeleton />
+          <ContentSkeleton />
+        </>
+      )}
+
+      {isError && (
+        <div className="user-details__error" role="alert">
+          {is404 ? (
+            <>
+              User not found.{' '}
+              <Link to="/users" className="user-details__error-link">
+                Back to Users
+              </Link>
+            </>
+          ) : (
+            <>
+              Failed to load user.{' '}
+              <button
+                className="user-details__retry-btn"
+                onClick={() => void refetch()}
+              >
+                Try again
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       {user && (
         <>
