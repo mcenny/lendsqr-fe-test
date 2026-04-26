@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '@/lib/api/users'
@@ -73,6 +73,11 @@ export default function UsersTable() {
     }
     setActiveFilter(key)
   }
+
+  const uniqueOrganizations = useMemo(() => {
+    if (!data) return []
+    return Array.from(new Set(data.map((u) => u.organization)))
+  }, [data])
 
   return (
     <div className="users-table-wrapper" ref={wrapperRef}>
@@ -149,12 +154,12 @@ export default function UsersTable() {
               !isError &&
               pageData.map((user) => (
                 <tr key={user.id} className="users-table__tr">
-                  <td className="users-table__td">{user.organization}</td>
-                  <td className="users-table__td">{user.username}</td>
-                  <td className="users-table__td">{user.email.toLowerCase()}</td>
-                  <td className="users-table__td">{user.phoneNumber}</td>
-                  <td className="users-table__td">{formatDate(user.dateJoined)}</td>
-                  <td className="users-table__td">
+                  <td className="users-table__td" data-label="Organization"><span className="users-table__td-value">{user.organization}</span></td>
+                  <td className="users-table__td" data-label="Username"><span className="users-table__td-value">{user.username}</span></td>
+                  <td className="users-table__td" data-label="Email"><span className="users-table__td-value">{user.email.toLowerCase()}</span></td>
+                  <td className="users-table__td" data-label="Phone Number"><span className="users-table__td-value">{user.phoneNumber}</span></td>
+                  <td className="users-table__td" data-label="Date Joined"><span className="users-table__td-value">{formatDate(user.dateJoined)}</span></td>
+                  <td className="users-table__td" data-label="Status">
                     <StatusPill status={user.status.toLowerCase() as UserStatus} />
                   </td>
                   <td className="users-table__td">
@@ -171,7 +176,10 @@ export default function UsersTable() {
           className="users-table__filter-popover"
           style={{ top: filterAnchor.top, left: filterAnchor.left }}
         >
-          <UsersFilter onClose={() => { setActiveFilter(null); setFilterAnchor(null) }} />
+          <UsersFilter 
+            onClose={() => { setActiveFilter(null); setFilterAnchor(null) }} 
+            organizations={uniqueOrganizations}
+          />
         </div>
       )}
 

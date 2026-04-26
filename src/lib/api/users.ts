@@ -1,4 +1,5 @@
 import { apiFetch } from './client'
+import { getAllCachedUsers, setAllCachedUsers } from '@/lib/cache'
 import { ApiError } from '@/types/api'
 import type { User } from '@/types/user'
 
@@ -11,12 +12,33 @@ export interface GetUsersParams {
   status?: string
 }
 
-// Fetched once per session; avoids redundant network requests when filters change.
+// In-memory session cache — avoids redundant network requests when filters change.
 let _allUsers: User[] | null = null
+
+async function revalidateInBackground(): Promise<void> {
+  try {
+    const fresh = await apiFetch<User[]>('')
+    _allUsers = fresh
+    void setAllCachedUsers(fresh)
+  } catch {
+    // Network unavailable — keep serving from cache
+  }
+}
 
 async function fetchAllUsers(): Promise<User[]> {
   if (_allUsers) return _allUsers
+
+  // Cross-session IDB cache: serve immediately, revalidate in background
+  const cached = await getAllCachedUsers()
+  if (cached) {
+    _allUsers = cached
+    void revalidateInBackground()
+    return cached
+  }
+
+  // Cold start — block on network, then persist
   _allUsers = await apiFetch<User[]>('')
+  void setAllCachedUsers(_allUsers)
   return _allUsers
 }
 

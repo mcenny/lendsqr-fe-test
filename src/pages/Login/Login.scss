@@ -50,6 +50,8 @@
     @include breakpoint(md) {
       box-shadow: 0 15px 90px rgba(0, 0, 0, 0.03);
       padding: $space-6;
+      padding-left: 6.25rem; // 100px
+      align-items: flex-start;
       min-height: unset;
     }
   }
@@ -75,7 +77,7 @@
     font-weight: $font-weight-bold;
     color: $color-primary-dark;
     letter-spacing: -0.04em;
-    margin-bottom: $space-1;
+    margin-bottom: 0.625rem;
 
     @include breakpoint(md) {
       font-size: 2.5rem;
@@ -87,15 +89,17 @@
     font-size: 1rem;
     font-weight: $font-weight-regular;
     color: $color-text-secondary;
-    margin-bottom: $space-5;
+    margin-bottom: 2.5rem;
 
     @include breakpoint(md) {
       font-size: 1.25rem;
+      margin-bottom: 3.75rem;
     }
   }
 
   &__field {
-    margin-bottom: $space-3;
+    margin-bottom: $space-4;
+    position: relative;
   }
 
   &__input-wrapper {
@@ -117,7 +121,7 @@
     flex: 1;
     border: none;
     outline: none;
-    padding: 0 $space-2;
+    padding: 0 $space-3;
     font-family: $font-family-auth;
     font-size: $font-size-sm;
     color: $color-text-secondary;
@@ -148,7 +152,7 @@
     color: $color-primary;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    padding: 0 $space-2;
+    padding: 0 $space-3;
     flex-shrink: 0;
 
     @include focus-visible;
@@ -156,7 +160,7 @@
 
   &__forgot {
     display: block;
-    text-align: right;
+    text-align: left;
     font-family: $font-family-auth;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
@@ -164,8 +168,8 @@
     letter-spacing: 1.2px;
     text-transform: uppercase;
     text-decoration: none;
-    margin-top: $space-2;
-    margin-bottom: $space-4;
+    margin-top: 0;
+    margin-bottom: $space-5; // 30px to match Figma
 
     @include focus-visible;
   }
@@ -195,7 +199,9 @@
     font-size: $font-size-xs;
     color: $color-status-blacklisted;
     margin-top: 4px;
-    min-height: 1.25rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
   }
 
   &__submit {

@@ -4,11 +4,12 @@ import './UsersFilter.scss'
 
 interface Props {
   onClose: () => void
+  organizations?: string[]
 }
 
 const STATUS_OPTIONS = ['active', 'inactive', 'pending', 'blacklisted'] as const
 
-export default function UsersFilter({ onClose }: Props) {
+export default function UsersFilter({ onClose, organizations = [] }: Props) {
   const [searchParams, setSearchParams] = useSearchParams()
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -54,23 +55,40 @@ export default function UsersFilter({ onClose }: Props) {
       aria-label="Filter users"
     >
       {[
-        { name: 'organization', label: 'Organization', type: 'text' },
-        { name: 'username', label: 'Username', type: 'text' },
-        { name: 'email', label: 'Email', type: 'email' },
-        { name: 'dateJoined', label: 'Date', type: 'date' },
-        { name: 'phoneNumber', label: 'Phone Number', type: 'tel' },
-      ].map(({ name, label, type }) => (
+        { name: 'organization', label: 'Organization', type: 'select', placeholder: 'Select' },
+        { name: 'username', label: 'Username', type: 'text', placeholder: 'User' },
+        { name: 'email', label: 'Email', type: 'email', placeholder: 'Email' },
+        { name: 'dateJoined', label: 'Date', type: 'date', placeholder: 'Date' },
+        { name: 'phoneNumber', label: 'Phone Number', type: 'tel', placeholder: 'Phone Number' },
+      ].map(({ name, label, type, placeholder }) => (
         <div key={name} className="users-filter__field">
           <label className="users-filter__label" htmlFor={`filter-${name}`}>
             {label}
           </label>
-          <input
-            id={`filter-${name}`}
-            name={name}
-            type={type}
-            className="users-filter__input"
-            defaultValue={searchParams.get(name) ?? ''}
-          />
+          {type === 'select' ? (
+            <select
+              id={`filter-${name}`}
+              name={name}
+              className="users-filter__select"
+              defaultValue={searchParams.get(name) ?? ''}
+            >
+              <option value="">{placeholder}</option>
+              {name === 'organization' && organizations.map((org) => (
+                <option key={org} value={org}>
+                  {org}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              id={`filter-${name}`}
+              name={name}
+              type={type}
+              className="users-filter__input"
+              placeholder={placeholder}
+              defaultValue={searchParams.get(name) ?? ''}
+            />
+          )}
         </div>
       ))}
 

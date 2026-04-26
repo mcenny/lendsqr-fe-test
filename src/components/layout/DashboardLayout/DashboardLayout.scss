@@ -13,8 +13,12 @@
 
   &__main {
     flex: 1;
-    padding: $space-6;
+    padding: $space-3;
     min-width: 0;
+
+    @include breakpoint(md) {
+      padding: $space-6;
+    }
 
     @include breakpoint(lg) {
       margin-left: $sidebar-width;

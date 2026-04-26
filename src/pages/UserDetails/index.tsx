@@ -102,7 +102,10 @@ export default function UserDetails() {
   useEffect(() => {
     if (!user || !id) return
     void getUserById(id)
-      .then((fresh) => setCachedUser(fresh))
+      .then((fresh) => {
+        void setCachedUser(fresh)
+        queryClient.setQueryData(['user', id], fresh)
+      })
       .catch(() => undefined)
   }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 

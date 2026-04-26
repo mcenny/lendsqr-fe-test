@@ -7,12 +7,32 @@
   border: 1px solid rgba(33, 63, 125, 0.06);
   border-radius: $radius-sm;
   box-shadow: $shadow-card;
-  padding: 30px 30px 32px;
+  padding: 16px 16px 20px;
+
+  @include breakpoint(md) {
+    padding: 30px 30px 32px;
+  }
 
   &__table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+
+    @media (max-width: 767px) {
+      display: block;
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    @include breakpoint(md) {
+      table-layout: fixed;
+    }
   }
 
   &__th {
@@ -51,36 +71,101 @@
   }
 
   &__tr {
-    position: relative;
+    // Mobile: card layout
+    @media (max-width: 767px) {
+      display: block;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      padding: $space-3 $space-3 $space-2;
+      margin-bottom: $space-3;
+      background-color: $color-surface;
+      position: relative;
 
-    &:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: $space-4;
-      right: $space-4;
-      height: 1px;
-      background-color: $color-border;
+      &::after {
+        display: none;
+      }
     }
 
-    &:hover {
-      background-color: rgba(84, 95, 125, 0.02);
+    // Desktop: table row with dividers
+    @include breakpoint(md) {
+      position: relative;
+
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: $space-4;
+        right: $space-4;
+        height: 1px;
+        background-color: $color-border;
+      }
+
+      &:hover {
+        background-color: rgba(84, 95, 125, 0.02);
+      }
     }
   }
 
   &__td {
-    padding: $space-3 $space-2;
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    &:last-child {
-      padding: $space-3 0;
-      text-align: center;
-      width: 40px;
+    // Mobile: label + value side by side with fixed label width
+    @media (max-width: 767px) {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      padding: 6px 0;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      border: none;
+      white-space: normal;
       overflow: visible;
+      text-overflow: unset;
+
+      &::before {
+        content: attr(data-label);
+        min-width: 120px;
+        flex-shrink: 0;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: $letter-spacing-wide;
+        color: $color-text-tertiary;
+      }
+
+      // Actions column: align right, no label
+      &:last-child {
+        justify-content: flex-end;
+        padding: 4px 0 0;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+
+    // Desktop: normal table cell
+    @include breakpoint(md) {
+      padding: $space-3 $space-2;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:last-child {
+        padding: $space-3 0;
+        text-align: center;
+        width: 40px;
+        overflow: visible;
+      }
+    }
+  }
+
+  &__td-value {
+    @media (max-width: 767px) {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 
@@ -97,12 +182,32 @@
     }
   }
 
+  // Skeleton rows also need card layout on mobile
+  tbody tr:not(.users-table__tr) {
+    @media (max-width: 767px) {
+      display: block;
+      border: 1px solid $color-border;
+      border-radius: $radius-sm;
+      padding: $space-3;
+      margin-bottom: $space-3;
+
+      td {
+        display: block;
+        padding: 6px 0;
+      }
+    }
+  }
+
   &__empty,
   &__error {
     padding: $space-6;
     text-align: center;
     font-size: $font-size-sm;
     color: $color-text-tertiary;
+
+    @media (max-width: 767px) {
+      display: block;
+    }
   }
 
   &__error {
@@ -127,6 +232,11 @@
     z-index: 100;
     width: 270px;
     box-shadow: $shadow-dropdown;
+
+    @media (max-width: 767px) {
+      width: calc(100vw - 32px);
+      left: 0 !important;
+    }
   }
 }
 
@@ -138,11 +248,17 @@
 .users-pagination {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  flex-direction: column;
   padding: $space-3 0;
   margin-top: $space-2;
   flex-wrap: wrap;
   gap: $space-2;
+
+  @include breakpoint(md) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   &__info {
     display: flex;

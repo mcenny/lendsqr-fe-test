@@ -7,7 +7,13 @@ import Login from '@/pages/Login'
 import Users from '@/pages/Users'
 import UserDetails from '@/pages/UserDetails'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+})
 
 export default function App() {
   return (

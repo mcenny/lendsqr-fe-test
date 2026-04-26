@@ -45,7 +45,8 @@
 
   &__btn {
     height: 40px;
-    min-width: 170px;
+    flex: 1;
+    min-width: 130px;
     border-radius: $radius-md;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
@@ -53,8 +54,14 @@
     text-transform: uppercase;
     cursor: pointer;
     background: none;
+    white-space: nowrap;
     padding: 0 $space-3;
     font-family: $font-family-primary;
+
+    @include breakpoint(md) {
+      flex: none;
+      min-width: 170px;
+    }
 
     @include focus-visible;
 
@@ -81,9 +88,14 @@
   &__basic-info {
     display: flex;
     align-items: center;
-    gap: $space-5;
+    gap: $space-4;
     flex-wrap: wrap;
-    padding: 30px 30px 30px;
+    padding: $space-3;
+
+    @include breakpoint(md) {
+      gap: $space-5;
+      padding: 30px;
+    }
   }
 
   &__avatar-wrap {
@@ -171,10 +183,16 @@
 
   &__tabs {
     display: flex;
-    justify-content: space-between;
+    gap: $space-4;
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 0 $space-5;
+    padding: 0 $space-3;
+
+    @include breakpoint(md) {
+      gap: 0;
+      justify-content: space-between;
+      padding: 0 $space-5;
+    }
 
     &::-webkit-scrollbar {
       display: none;
@@ -190,6 +208,7 @@
     border-bottom: 2px solid transparent;
     cursor: pointer;
     white-space: nowrap;
+    flex-shrink: 0;
     font-family: $font-family-primary;
     font-weight: $font-weight-regular;
 
@@ -206,7 +225,11 @@
     border: 1px solid rgba(33, 63, 125, 0.06);
     border-radius: $radius-sm;
     box-shadow: $shadow-card;
-    padding: $space-5 $space-5;
+    padding: $space-3;
+
+    @include breakpoint(md) {
+      padding: $space-5;
+    }
   }
 
   &__tab-placeholder {
