@@ -4,37 +4,56 @@ import briefcaseIcon from '@/assets/icons/briefcase.svg'
 import usersNavIcon from '@/assets/icons/users-nav.svg'
 import chevronDownIcon from '@/assets/icons/chevron-down.svg'
 import logoutIcon from '@/assets/icons/logout.svg'
-import navPlaceholderIcon from '@/assets/icons/nav-placeholder.svg'
+import guarantorsIcon from '@/assets/icons/guarantors.svg'
+import loansIcon from '@/assets/icons/loans.svg'
+import decisionModelsIcon from '@/assets/icons/decision-models.svg'
+import savingsIcon from '@/assets/icons/savings.svg'
+import loanRequestsIcon from '@/assets/icons/loan-requests.svg'
+import whitelistIcon from '@/assets/icons/whitelist.svg'
+import karmaIcon from '@/assets/icons/karma.svg'
+import organizationIcon from '@/assets/icons/organization.svg'
+import loanProductsIcon from '@/assets/icons/loan-products.svg'
+import savingsProductsIcon from '@/assets/icons/savings-products.svg'
+import feesAndChargesIcon from '@/assets/icons/fees-and-charges.svg'
+import transactionsIcon from '@/assets/icons/transactions.svg'
+import servicesIcon from '@/assets/icons/services.svg'
+import serviceAccountIcon from '@/assets/icons/service-account.svg'
+import settlementsIcon from '@/assets/icons/settlements.svg'
+import reportsIcon from '@/assets/icons/reports.svg'
+import preferencesIcon from '@/assets/icons/preferences.svg'
+import feesAndPricingIcon from '@/assets/icons/fees-and-pricing.svg'
+import auditLogsIcon from '@/assets/icons/audit-logs.svg'
+import systemsMessagesIcon from '@/assets/icons/systems-messages.svg'
 import './Sidebar.scss'
 
 const CUSTOMERS_NAV = [
   { label: 'Users', icon: usersNavIcon, to: '/users' as const },
-  { label: 'Guarantors', icon: navPlaceholderIcon },
-  { label: 'Loans', icon: navPlaceholderIcon },
-  { label: 'Decision Models', icon: navPlaceholderIcon },
-  { label: 'Savings', icon: navPlaceholderIcon },
-  { label: 'Loan Requests', icon: navPlaceholderIcon },
-  { label: 'Whitelist', icon: navPlaceholderIcon },
-  { label: 'Karma', icon: navPlaceholderIcon },
+  { label: 'Guarantors', icon: guarantorsIcon },
+  { label: 'Loans', icon: loansIcon },
+  { label: 'Decision Models', icon: decisionModelsIcon },
+  { label: 'Savings', icon: savingsIcon },
+  { label: 'Loan Requests', icon: loanRequestsIcon },
+  { label: 'Whitelist', icon: whitelistIcon },
+  { label: 'Karma', icon: karmaIcon },
 ]
 
 const BUSINESSES_NAV = [
-  { label: 'Organization', icon: navPlaceholderIcon },
-  { label: 'Loan Products', icon: navPlaceholderIcon },
-  { label: 'Savings Products', icon: navPlaceholderIcon },
-  { label: 'Fees and Charges', icon: navPlaceholderIcon },
-  { label: 'Transactions', icon: navPlaceholderIcon },
-  { label: 'Services', icon: navPlaceholderIcon },
-  { label: 'Service Account', icon: navPlaceholderIcon },
-  { label: 'Settlements', icon: navPlaceholderIcon },
-  { label: 'Reports', icon: navPlaceholderIcon },
+  { label: 'Organization', icon: organizationIcon },
+  { label: 'Loan Products', icon: loanProductsIcon },
+  { label: 'Savings Products', icon: savingsProductsIcon },
+  { label: 'Fees and Charges', icon: feesAndChargesIcon },
+  { label: 'Transactions', icon: transactionsIcon },
+  { label: 'Services', icon: servicesIcon },
+  { label: 'Service Account', icon: serviceAccountIcon },
+  { label: 'Settlements', icon: settlementsIcon },
+  { label: 'Reports', icon: reportsIcon },
 ]
 
 const SETTINGS_NAV = [
-  { label: 'Preferences', icon: navPlaceholderIcon },
-  { label: 'Fees and Pricing', icon: navPlaceholderIcon },
-  { label: 'Audit Logs', icon: navPlaceholderIcon },
-  { label: 'Systems Messages', icon: navPlaceholderIcon },
+  { label: 'Preferences', icon: preferencesIcon },
+  { label: 'Fees and Pricing', icon: feesAndPricingIcon },
+  { label: 'Audit Logs', icon: auditLogsIcon },
+  { label: 'Systems Messages', icon: systemsMessagesIcon },
 ]
 
 export default function Sidebar() {
